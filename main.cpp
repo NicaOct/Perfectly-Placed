@@ -210,7 +210,7 @@ int main() {
     helper.help();
     ///////////////////////////////////////////////////////////////////////////
 
-    SomeClass *c = getC();
+    /*SomeClass *c = getC();
     std::cout << c << "\n";
     delete c;
 
@@ -257,6 +257,6 @@ int main() {
 
         window.clear();
         window.display();
-    }
+    }*/
     return 0;
 }
