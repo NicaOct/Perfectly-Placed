@@ -26,7 +26,13 @@ class Object {
         int tolerance;
 
     public:
-        Object()=default;
+        Object() {
+            name = "";
+            description = "";
+            positionX = 0, positionY = 0;
+            correctX = 0, correctY = 0;
+            tolerance = 0;
+        }
         Object(const std::string &name, const std::string &description, int positionX, int positionY, int ceorrectX, int correctY, int tolerance){
             this->name=name; this->description=description; this->positionX=positionX; this->positionY=positionY;
             this->correctX=ceorrectX; this->correctY=correctY;this->correctY=correctY; this->tolerance=tolerance;
@@ -78,7 +84,10 @@ private:
     int difficulty;
     std::vector<Object> objects;
 public:
-    Room()=default;
+    Room() {
+        name = "";
+        difficulty=0;
+    }
     Room(const std::string &name, int difficulty) {
         this->name = name; this->difficulty = difficulty;
         std::cout<<"Room created "<<this->name<<"\n";
@@ -98,20 +107,15 @@ public:
         this->difficulty = room.difficulty;
         return *this;
     }
-    void addObject(const Object &obj) {
-        if (&obj!=nullptr) {
-            objects.push_back(obj);
-        }
-        else std::cout<<"Cannot add null object\n";
+    void addObject(const Object& obj) {
+        objects.push_back(obj);
     }
     [[nodiscard]] bool isLevelComplete() const {
-        for (const Object& obj : objects) {
-            if (!obj.isInCorrectPosition()) {
-                return false;
-            }
-            return true;
-        }
+        return std::ranges::all_of(objects, [](const Object& obj) {
+            return obj.isInCorrectPosition();
+        });
     }
+
 };
 class Hand {
     private:
