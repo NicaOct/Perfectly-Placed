@@ -13,6 +13,47 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(cmake/Options.cmake)
 
+include(FetchContent)
+
+function(include_dependency libName gitURL gitTag)
+    FetchContent_Declare(${libName}
+            GIT_REPOSITORY  ${gitURL}
+            GIT_TAG     ${gitTag}
+            GIT_SHALLOW TRUE
+            GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(${libName})
+endfunction()
+
+set(LIB1 raylib)
+find_package(${LIB1} QUIET)
+if(NOT ${LIB1}_FOUND)
+    include_dependency(${LIB1} https://github.com/raysan5/raylib.git 5.5)
+endif()
+
+add_executable(${PROJECT_NAME}
+        main.cpp
+        generated/src/Helper.cpp
+        headers/Object.h
+        src/Object.cpp
+        headers/Room.h
+        headers/Hand.h
+        headers/ObjectAlign.h
+        src/ObjectAlign.cpp
+        headers/Painting.h
+        src/Painting.cpp
+        headers/HouseholdObject.h
+        src/HouseholdObject.cpp
+        headers/Pencil.h
+        src/Pencil.cpp
+        headers/MyException.h
+        src/MyException.cpp
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${raylib_INCLUDE_DIRS})
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${LIB1})
+
 ###############################################################################
 
 # external dependencies with FetchContent
@@ -42,10 +83,7 @@ include(cmake/Options.cmake)
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME}
-    main.cpp
-    generated/src/Helper.cpp
-)
+
 
 include(cmake/CompilerFlags.cmake)
 
@@ -59,7 +97,7 @@ target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE generated/include)
 # target_link_libraries(${PROJECT_NAME} <SomeLib>)
 
 ###############################################################################
-
+file(COPY resources DESTINATION ${CMAKE_BINARY_DIR})
 # copy binaries to "bin" folder; these are uploaded as artifacts on each release
 # DESTINATION_DIR is set as "bin" in cmake/Options.cmake:6
 install(TARGETS ${PROJECT_NAME} DESTINATION ${DESTINATION_DIR})
