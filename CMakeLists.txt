@@ -48,6 +48,16 @@ add_executable(${PROJECT_NAME}
         src/Pencil.cpp
         headers/MyException.h
         src/MyException.cpp
+        headers/TextLoadException.h
+        src/TextLoadException.cpp
+        headers/GameObject.h
+        src/GameObject.cpp
+        src/GameObject.cpp
+        headers/CollisionUtils.h
+        headers/CollisionUtils.h
+        headers/ObjectType.h
+        headers/ObjectFactory.h
+        src/ObjectFactory.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${raylib_INCLUDE_DIRS})

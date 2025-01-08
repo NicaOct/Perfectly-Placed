@@ -18,8 +18,10 @@ public:
     void DrawHitBox(bool isColliding) const;
     static int GetObjectCount();
 
+    [[nodiscard]] Vector2 GetPosition() const;
+    void SetPosition(Vector2 newPosition);
+
 protected:
-    static int objecCount;
     Vector2 position;
     Texture2D texture;
 };

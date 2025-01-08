@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <bits/ranges_algo.h>
-#include "../headers/ObjectAlign.h"
+
 class Room {
 private:
     std::string name;
@@ -42,4 +42,5 @@ public:
     }
 
 };
+
 #endif //ROOM_H

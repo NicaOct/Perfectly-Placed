@@ -3,6 +3,7 @@
 #include "../headers/HouseholdObject.h"
 
 int HouseholdObject::objectCount = 0;
+
 HouseholdObject::HouseholdObject(Vector2 initPosition)
     : position(initPosition), texture{} {
     objectCount++;
@@ -32,3 +33,10 @@ int HouseholdObject::GetObjectCount() {
     return objectCount;
 }
 
+Vector2 HouseholdObject::GetPosition() const {
+    return position;
+}
+
+void HouseholdObject::SetPosition(Vector2 newPosition) {
+    position = newPosition;
+}

@@ -4,11 +4,18 @@
 
 #include <Helper.h>
 
-#include "./headers/Object.h"
-#include "./headers/Hand.h"
-#include "./headers/Room.h"
+//#include "./headers/Object.h"
+//#include "./headers/Hand.h"
+//#include "./headers/Room.h"
+#include "./headers/HouseholdObject.h"
 #include "./headers/Painting.h"
+#include "./headers/Pencil.h"
+#include "./headers/MyException.h"
+#include "./headers/CollisionUtils.h"
+//#include "./headers/GameObject.h"
+//#include "./headers/TextLoadException.h"
 #include "raylib.h"
+
 
 class SomeClass {
 public:
@@ -20,7 +27,7 @@ SomeClass *getC() {
 }
 
 int main() {
-    Room bedroom("Bedroom", 1);
+    /*Room bedroom("Bedroom", 1);
     Object lamp("Lamp","When it is on it keeps the monsters at bay",10,50, 60,100, 20);
     Object diary("Diary","Your secrets won't stay hidden forever",10,10, 10, 10,50);
     bedroom.addObject(lamp);
@@ -47,20 +54,28 @@ int main() {
     hand.grabObject(lamp);
     hand.grabObject(diary);
     hand.releaseObject();
-
-    constexpr int screenWidth = 1600;
-    constexpr int screenHeight = 900;
+    */
+/*try {
+    Painting painting;
+    painting.LoadText();
+    painting.Draw();
+}
+    catch (const TextLoadException& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "Failed: " << e.GetFilePath() << std::endl;
+    }*/
+    constexpr int screenWidth = 1920;
+    constexpr int screenHeight = 1080;
 
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(screenWidth, screenHeight, "Start");
-
-    Vector2 startPoint = { 100, 100 };
-    Vector2 endPoint = { static_cast<float>(screenWidth) - 100, static_cast<float>(screenHeight) - 100 };
-    bool moveStartPoint = false;
-    bool moveEndPoint = false;
-
     SetTargetFPS(60);
-    InitAudioDevice();
+
+    Rectangle targetZone = { 1000, 800, 50, 50 }; // Zona unde trebuie plasate obiectele
+    bool isDraggingPainting = false;
+    bool isDraggingPencil = false;
+
+InitAudioDevice();
 
     Music StartMusic = LoadMusicStream("./resources/sounds/seagull.wav");
     if (!FileExists("./resources/sounds/seagull.wav")) {
@@ -74,43 +89,69 @@ int main() {
     } else {
         printf("File found! resources/sounds/bee.wav\n");
     }
-    PlayMusicStream(StartMusic);
-    // Main game loop
+    Texture2D background = LoadTexture("D:/githubdesktop/Perfectly-Placed/resources/textures/Background.jpg");
+    if (background.id == 0) {
+        printf("Failed to load background texture\n");
+    }
 
-    while (!WindowShouldClose())
-    {
-        // somewhat choose and pick: update game or use a function in a class regarding collisions with the correct position
-        if(IsKeyPressed(KEY_SPACE)) {
+    Painting painting;
+    Pencil pencil;
+
+    PlayMusicStream(StartMusic);
+
+    while (!WindowShouldClose()) {
+        Vector2 mouse = GetMousePosition();
+
+        // Drag logic
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (CheckCollisionPointRec(mouse, painting.GetRect())) {
+                isDraggingPainting = true;
+            } else if (CheckCollisionPointRec(mouse, pencil.GetRect())) {
+                isDraggingPencil = true;
+            }
+        }
+
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+            isDraggingPainting = false;
+            isDraggingPencil = false;
+        }
+
+        if (isDraggingPainting) {
+            painting.SetPosition({ mouse.x - painting.GetRect().width / 2, mouse.y - painting.GetRect().height / 2 });
+        }
+        if (isDraggingPencil) {
+            pencil.SetPosition({ mouse.x - pencil.GetRect().width / 2, mouse.y - pencil.GetRect().height / 2 });
+        }
+
+	if(IsKeyPressed(KEY_SPACE)) {
             StopMusicStream(StartMusic);
             PlaySound(StartLoadSound);
         }
-        Vector2 mouse = GetMousePosition();
+        bool isColliding = CheckCollision(painting, pencil);
 
-        if (CheckCollisionPointCircle(mouse, startPoint, 50.0f) && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) moveStartPoint = true;
-        else if (CheckCollisionPointCircle(mouse, endPoint, 50.0f) && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) moveEndPoint = true;
-
-        if (moveStartPoint)
-        {
-            startPoint = mouse;
-            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) moveStartPoint = false;
-        }
-        if (moveEndPoint)
-        {
-            endPoint = mouse;
-            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) moveEndPoint = false;
-        }
         BeginDrawing();
+        ClearBackground(RAYWHITE);
+        DrawTexture(background, 0, 0, WHITE);
+        DrawText("Place the painting where you think it fits best.", 10, 10, 40, BLACK);
 
-            ClearBackground(RAYWHITE);
+        painting.Draw();
+        pencil.Draw();
 
-            DrawText("MOVE CIRCLES WITH MOUSE", screenWidth/2-300, screenHeight/2-100, 40, LIME);
+        //Afisez Hitbox pentru obiecte daca se suprapun
+        painting.DrawHitBox(isColliding);
+        pencil.DrawHitBox(isColliding);
 
-            DrawCircleV(startPoint, CheckCollisionPointCircle(mouse, startPoint, 100.0f)? 30.0f : 20.0f, moveStartPoint? RED : BLUE);
-            DrawCircleV(endPoint, CheckCollisionPointCircle(mouse, endPoint, 100.0f)? 30.0f : 20.0f, moveEndPoint? RED : BLUE);
-            DrawCircleV(endPoint, CheckCollisionPointCircle(mouse, endPoint, 100.0f)? 30.0f : 20.0f, moveEndPoint? RED : BLUE);
+        // Verific plasarea prin coliziune
+        if (CheckCollisionRecs(painting.GetRect(), targetZone)) {
+            DrawText("Painting placed correctly!", 10, 60, 40, GREEN);
+        }
+        if (CheckCollisionRecs(pencil.GetRect(), targetZone)) {
+            DrawText("Pencil placed correctly!", 10, 70, 20, GREEN);
+        }
 
         EndDrawing();
     }
+
     UnloadMusicStream(StartMusic);
     UnloadSound(StartLoadSound);
     CloseWindow();

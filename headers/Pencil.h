@@ -8,6 +8,7 @@ public:
     Pencil();
     ~Pencil() override = default;
 
+    [[nodiscard]] std::unique_ptr<HouseholdObject> clone() const override;
     void LoadText() override;
 };
 

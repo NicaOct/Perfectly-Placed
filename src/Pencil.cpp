@@ -5,7 +5,9 @@ Pencil::Pencil()
 {
     texture = LoadTexture("../resources/textures/Pencil.png");
 }
-
+std::unique_ptr<HouseholdObject> Pencil::clone() const {
+    return std::make_unique<Pencil>(*this);
+}
 void Pencil::LoadText() {
     texture = LoadTexture("../resources/textures/Painting.png");
 }
