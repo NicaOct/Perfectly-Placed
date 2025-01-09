@@ -3,6 +3,21 @@
 
 #include <vector>
 
+/**
+ * @file Observer.h
+ * @brief Defines the Observer design pattern implementation.
+ *
+ * This file contains the base Observer class and the Subject class.
+ */
+
+/**
+ * @class Observer
+ * @brief Abstract base class for objects that need to be notified.
+ *
+ * The Observer class is used in the Observer design pattern, where objects (observers)
+ * subscribe to a Subject and get notified when an event occurs.
+ */
+
 class Observer {
 public:
     virtual void onNotify() = 0;

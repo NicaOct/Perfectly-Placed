@@ -3,6 +3,16 @@
 
 #include "raylib.h"
 
+/**
+ * @file GameObject.h
+ * @brief Defines the base class for a game object with position, size, and color.
+ */
+
+/**
+ * @class GameObject
+ * @brief Represents a basic game object with position, size, and color attributes.
+ */
+
 class GameObject {
 public:
     Vector2 position;

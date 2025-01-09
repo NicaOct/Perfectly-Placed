@@ -4,6 +4,16 @@
 #include "raylib.h"
 #include <memory>
 
+/**
+ * @file HouseholdObject.h
+ * @brief Defines the abstract base class for household objects in the game.
+ */
+
+/**
+ * @class HouseholdObject
+ * @brief Represents a generic household object with position, texture, and behaviors.
+ */
+
 class HouseholdObject {
 public:
     static int objectCount;

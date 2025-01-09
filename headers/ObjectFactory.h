@@ -5,6 +5,11 @@
 #include "ObjectType.h"
 #include <memory>
 
+/**
+ * @file ObjectFactory.h
+ * @brief Factory design pattern implementation for creating `HouseholdObject` instances.
+ */
+
 
 std::shared_ptr<HouseholdObject> makeObjectFactory(ObjectType type);
 

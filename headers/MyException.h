@@ -4,6 +4,18 @@
 #include <exception>
 #include <string>
 
+/**
+ * @file MyException.h
+ * @brief Custom exception class for handling specific application errors.
+ */
+
+/**
+ * @class MyExcpetion
+ * @brief A custom exception class inheriting from `std::exception`.
+ *
+ * This class allows for more descriptive error messages tailored to the application's needs.
+ */
+
 class MyExcpetion : public std::exception {
 public:
     explicit MyExcpetion(std::string  message);

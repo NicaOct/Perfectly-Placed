@@ -18,26 +18,7 @@
 //#include "./headers/TextLoadException.h"
 #include "raylib.h"
 
-
-class SomeClass {
-public:
-    explicit SomeClass(int) {}
-};
-
-SomeClass *getC() {
-    return new SomeClass{2};
-}
-
 int main() {
-/*try {
-    Painting painting;
-    painting.LoadText();
-    painting.Draw();
-}
-    catch (const TextLoadException& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        std::cerr << "Failed: " << e.GetFilePath() << std::endl;
-    }*/
     constexpr int screenWidth = 1920;
     constexpr int screenHeight = 1080;
 
@@ -111,18 +92,18 @@ InitAudioDevice();
         BeginDrawing();
         ClearBackground(RAYWHITE);
         DrawTexture(background, 0, 0, WHITE);
-        DrawText("Place the paintings where you think they fit best.", 10, 10, 40, BLACK);
+        DrawText("Place the paintings where you think they fit best.", 10, 10, 44, BLACK);
 
         painting.Draw();
         pencil.Draw();
 
-        //Afisez Hitbox pentru obiecte daca se suprapun
+        //Show Hitboxes if the objects are colliding
         painting.DrawHitBox(isColliding);
         pencil.DrawHitBox(isColliding);
 
-        // Verific plasarea prin coliziune
+        // Check if it is in the correct place by colliding
         if (CheckCollisionRecs(painting.GetRect(), targetZone1) && CheckCollisionRecs(pencil.GetRect(), targetZone2)) {
-            DrawText("Paintings placed correctly!", 10, 60, 40, GREEN);
+            DrawText("Paintings placed perfectly!", 400, 600, 80, GREEN);
             placementSubject.notifyObservers();
         }
         EndDrawing();
