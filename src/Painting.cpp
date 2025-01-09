@@ -13,8 +13,8 @@ std::unique_ptr<HouseholdObject> Painting::clone() const {
 };
 
 void Painting::LoadText() {
-    texture = LoadTexture("../resources/textures/Painting.jpg");
+    texture = LoadTexture("../resources/textures/Painting.png");
     if (texture.id == 0) {
-        throw TextLoadException("../resources/textures/Painting.jpg");
+        throw TextLoadException("../resources/textures/Painting.png");
     }
 }

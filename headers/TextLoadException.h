@@ -4,9 +4,6 @@
 #include <exception>
 #include <string>
 
-#include <exception>
-#include <string>
-
 class TextLoadException : public std::exception {
 public:
     explicit TextLoadException(const std::string& path);

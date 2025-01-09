@@ -34,12 +34,7 @@ endif()
 add_executable(${PROJECT_NAME}
         main.cpp
         generated/src/Helper.cpp
-        headers/Object.h
-        src/Object.cpp
-        headers/Room.h
-        headers/Hand.h
         headers/ObjectAlign.h
-        src/ObjectAlign.cpp
         headers/Painting.h
         src/Painting.cpp
         headers/HouseholdObject.h
@@ -58,6 +53,8 @@ add_executable(${PROJECT_NAME}
         headers/ObjectType.h
         headers/ObjectFactory.h
         src/ObjectFactory.cpp
+        headers/Observer.h
+        headers/GameNotifications.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${raylib_INCLUDE_DIRS})

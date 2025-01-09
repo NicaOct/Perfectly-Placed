@@ -3,11 +3,11 @@
 Pencil::Pencil()
     : HouseholdObject({200.0f, 150.0f})
 {
-    texture = LoadTexture("../resources/textures/Pencil.png");
+    texture = LoadTexture("../resources/textures/Pencil.PNG");
 }
 std::unique_ptr<HouseholdObject> Pencil::clone() const {
     return std::make_unique<Pencil>(*this);
 }
 void Pencil::LoadText() {
-    texture = LoadTexture("../resources/textures/Painting.png");
+    texture = LoadTexture("../resources/textures/Pencil.PNG");
 }

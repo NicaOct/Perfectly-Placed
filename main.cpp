@@ -12,6 +12,8 @@
 #include "./headers/Pencil.h"
 #include "./headers/MyException.h"
 #include "./headers/CollisionUtils.h"
+#include "./headers/Observer.h"
+#include "./headers/GameNotifications.h"
 //#include "./headers/GameObject.h"
 //#include "./headers/TextLoadException.h"
 #include "raylib.h"
@@ -27,34 +29,6 @@ SomeClass *getC() {
 }
 
 int main() {
-    /*Room bedroom("Bedroom", 1);
-    Object lamp("Lamp","When it is on it keeps the monsters at bay",10,50, 60,100, 20);
-    Object diary("Diary","Your secrets won't stay hidden forever",10,10, 10, 10,50);
-    bedroom.addObject(lamp);
-    bedroom.addObject(diary);
-    diary.setPositionX(0);
-    diary.setCorrectX(100);
-    lamp.setTolerance(5);
-    lamp.setPositionY(120);
-    if(bedroom.isLevelComplete())
-        std::cout<<"Level completed\n";
-    else
-        std::cout<<"You failed\n";
-
-    //lamp.moveTo(60,70);
-    lamp.setPositionX(lamp.getPositionX()+50);
-    lamp.setPositionY(lamp.getPositionY()+50);
-    if(bedroom.isLevelComplete())
-        std::cout<<"Level completed\n";
-    else
-        std::cout<<"You failed\n";
-    Hand hand(0,0);
-    hand.setPositionX(hand.getPositionX()+50);
-    hand.releaseObject();
-    hand.grabObject(lamp);
-    hand.grabObject(diary);
-    hand.releaseObject();
-    */
 /*try {
     Painting painting;
     painting.LoadText();
@@ -71,7 +45,8 @@ int main() {
     InitWindow(screenWidth, screenHeight, "Start");
     SetTargetFPS(60);
 
-    Rectangle targetZone = { 1000, 800, 50, 50 }; // Zona unde trebuie plasate obiectele
+    Rectangle targetZone1 = { 800, 700, 50, 50 }; // Zona unde trebuie plasate obiectele
+    Rectangle targetZone2 = { 1200, 500, 50, 50 };
     bool isDraggingPainting = false;
     bool isDraggingPencil = false;
 
@@ -96,6 +71,10 @@ InitAudioDevice();
 
     Painting painting;
     Pencil pencil;
+    Subject placementSubject;
+
+    PlacementNotification notification;
+    placementSubject.addObserver(&notification);
 
     PlayMusicStream(StartMusic);
 
@@ -132,7 +111,7 @@ InitAudioDevice();
         BeginDrawing();
         ClearBackground(RAYWHITE);
         DrawTexture(background, 0, 0, WHITE);
-        DrawText("Place the painting where you think it fits best.", 10, 10, 40, BLACK);
+        DrawText("Place the paintings where you think they fit best.", 10, 10, 40, BLACK);
 
         painting.Draw();
         pencil.Draw();
@@ -142,13 +121,10 @@ InitAudioDevice();
         pencil.DrawHitBox(isColliding);
 
         // Verific plasarea prin coliziune
-        if (CheckCollisionRecs(painting.GetRect(), targetZone)) {
-            DrawText("Painting placed correctly!", 10, 60, 40, GREEN);
+        if (CheckCollisionRecs(painting.GetRect(), targetZone1) && CheckCollisionRecs(pencil.GetRect(), targetZone2)) {
+            DrawText("Paintings placed correctly!", 10, 60, 40, GREEN);
+            placementSubject.notifyObservers();
         }
-        if (CheckCollisionRecs(pencil.GetRect(), targetZone)) {
-            DrawText("Pencil placed correctly!", 10, 70, 20, GREEN);
-        }
-
         EndDrawing();
     }
 
